@@ -209,7 +209,6 @@ function handleAppleCollision() {
   } else {}
   // code to determine the row and column of the snakeSquare to add to the snake
 
-  makeSnakeSquare(row, column);
 }
 
 function hasCollidedWithSnake() {
@@ -221,14 +220,12 @@ function hasCollidedWithSnake() {
   head and each part of the snake's body also knows its own row and column.
   
   */
-  for (var i = snake.body.length - 1; i > 0; i--) {
-    var currentPiece = snake.body[i];
-    if (snake.head.row === currentPiece.row && snake.head.column === currentPiece.column) {
+  for (var i = 1; i < snake.body.length; i++) {
+    if (snake.head.row === snake.body[i].row && snake.head.column === snake.body[i].column) {
     return true;
-    } else {
-    return false;
-    }
+    } 
   }
+  return false
 }
 
 function endGame() {
@@ -339,8 +336,14 @@ function getRandomAvailablePosition() {
   while (!spaceIsAvailable) {
     randomPosition.column = Math.floor(Math.random() * COLUMNS);
     randomPosition.row = Math.floor(Math.random() * ROWS);
-    spaceIsAvailable = true;
-
+    for (var i = 0; i < snake.body.length; i++) {
+      var currentPiece = snake.body[i];
+      if (randomPosition.row !== currentPiece.row && randomPosition.column !== currentPiece.column) {
+      spaceIsAvailable = true;
+      } else {
+      spaceIsAvailable = false;
+      }
+    }
     /*
     TODO 13: After generating the random position determine if that position is
     not occupied by a snakeSquare in the snake's body. If it is then set 
